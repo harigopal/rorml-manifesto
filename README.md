@@ -1,84 +1,94 @@
-# Rails on Ocaml
+# Rails on ReasonML (RoRML)
 
 ## Introduction
 
 This is a follow-up to Jasim A Basheer's post titled _Rails on Ocaml_. It expands on the ideas presented there to create a more concrete list of suggestions that could be used to build a web-framework that learns from what Ruby-on-Rails does best. This article suggests the use of ReasonML to build this new framework, given that it is a strongly-typed functional programming language that mangages to the pragmatic about its choices.
 
-This article is split into sections that cover the major features that are expected from a modern web-framework.
+This article is split into sections that cover the major features that are _expected_ from a modern web-framework. However, this does not mean that _all_ these features must be present for the framework to be viable. Rails collected these features over time, and continues to do so(conventions for file storage were introduced in Rails 5.2), and relied on third-party packages to supply what was missing.
 
 ## What's covered?
 
 1. Interacting with Databases
 2. Maintaining Databases
 3. Routing Requests
-4. Rendering HTML
-5. Asset Management
-6. Building an API
-7. Testing
-8. Security
-9. Logging
-10. Aesthetics
-11. Internationalization
-12. REPL
-13. CLI
-14. Supporting Extensions
-
+4. Session Management
+5. Rendering HTML
+6. Asset Management
+7. File Storage
+8. Building an API
+9. Testing
+10. Security
+11. Logging
+12. Internationalization
+13. REPL
+14. CLI
+15. Supporting Extensions
+16. Utility Functions
+17. Documentation
 
 ## Testing
 
-Something Jasim said in his article does not sit right with me:
+```
+[TODO] Are there any more modern alternatives to the Capybara for "system" tests?
+```
 
-> I don’t care about it deeply enough — fewer bugs and stable programs is sort of disconnected from my day-to-day existence, and let the bean counters care about it if they have to.
+The test framework needs to take care of a few things:
 
-I am not a bean counter, but I've been working on the same web application for the past six years, and over that time, it has changed it's shape and purpose more times that I can remember.
+1. It should be straight-forward to _set up_ the conditions required to run tests. This usually involves supplying a method to seed data to a test database.
+2. It should be possible to write steps and expectations in a way that feels natural.
+3. The test framework should take care of browser-integration.
 
-It started as a content delivery system focused on teaching first-time entrepreneurs how to build startups (hence the name of [the company I work for](https://www.sv.co)), and is currently [an open-source white-labeled learning management system](https://www.pupilfirst.com) that advocates the ideology that true learning occurs through a cycle of action and feedback / critique from experts.
+### Setting up a test
 
-We've had quite a variety of audience using the platform through those six years, and very rarely have they complained about the platform failing or doing something unexpected, and that's entirely because of how easy testing is, and how the _community_ has evolved to _expect_ tests for even the simplest of applications.
+```
+TODO: There is much more to testing that seeding. The framework needs to create the database from the current schema, and needs to supply some way to clean the database between tests. Rails does this by wrapping each test in a database transaction and the rolling it back at the end - and it does so by default, without any extra configuration.
 
-### Tests are also code.
+There's probably more that I'm forgetting or am plain unaware of.
 
-Whether a programmer writes tests depends on:
+This section also needs examples.
+```
 
-1. Whether it's easy to write tests - to express steps and expectations _naturally_.
-2. Whether the tests run reliably, and reasonably quickly.
+In my opinion, Rails has very basic support for _seeding_ test data. Thankfully, there many alternatives that fill the gap, with the most popular being [factory_bot](https://github.com/thoughtbot/factory_bot), which allows developers to create _templates_ of _models_ which can be easily used within individual tests to create their own database environment.
 
-Our tests are written using RSpec, but that choice was arbitrary, and was made at a point of time when we didn't have any experience with Rails' default - Minitest. A comparison between the two will have to be made at some point of time, but RSpec offers a syntax that is natural to write and closely follows actions that _we_ would take when manually testing a process in a browser. Most of our tests are _integration_ tests, - we generally write non-integration tests _only_ for code that doesn't get executed because of a user's action - background jobs.
+### Writing tests
 
-The presence of a tightly integrated test framework that _knows_ how to interact with each of the layers of the application is _essential_ to making the process possible. And while types will protect developers from making _mistakes of accounting_ **[what was the phrase Jasim used?]**, it will not protect against mistakes made in business logic that are inevitable in large, long-lived codebases.
+Rails comes with a testing framework called Minitest.
 
-### List of requirements:
+```
+[TODO] I've never really used Minitest - I can't really comment on it. Must research.
+```
 
-**[TODO]** Boil requirements down to a list.
+A common alternative is _RSpec_, which offers a syntax that is natural to write and closely follows actions that _we_ would take when manually testing a feature in a browser. While Rails supports testing of all layers of the application, it certainly encourages writing _system_ tests using Capybara. Non-system tests are generally required only for code that doesn't get executed because of a user's action - background jobs, for example.
 
-1. A
-2. B
+The presence of a tightly integrated test framework that _knows_ how to interact with each of the layers of the application is _essential_ to making the process possible. And while types will protect developers from making _clerical_ errors, it will not protect against mistakes made in business logic that are inevitable in large, long-lived codebases.
 
-## Aesthetics
+### Running tests on the browser
 
-**[TODO]** This part is important, but deviates from the topic at hand, and I'm not sure how to rope it in.
+Here's are the key benefits of using Capybara, according to their documentation:
+
+> - No setup necessary for Rails and Rack application. Works out of the box.
+> - Intuitive API which mimics the language an actual user would use.
+> - Switch the backend your tests run against from fast headless mode to an actual browser with no changes to your tests.
+> - Powerful synchronization features mean you never have to manually wait for asynchronous processes to complete.
+
+These features will have to be kept in-tact. This combination of features allows devs to write tests quickly with minimum fuss.
+
+## Utility Functions
+
+```
+[TODO] This section needs examples. Also, are there existing ReasonML packages that attempt to do this already?
+```
 
 > Typed FP expands our taste in programming because like how Ruby and Rails showed how _programming is writing_, Typed FP shows how _programming is mathematics_.
 
-The reality is that programming is both writing _and_ mathematics. What programmers need is a syntax to express their ideas and intent in a manner that is both _fluent_ and _sound_. I believe that ReasonML goes a long way in supplying the _soundness_ that is lacking in a language like Ruby, but I wonder whether _fluency_ is a major concern for ReasonML's language developers. Here's a simple example:
+The reality is that programming is both writing _and_ mathematics. What programmers need is a syntax to express their ideas and intent in a manner that is both _fluent_ and _sound_. I believe that ReasonML goes a long way in supplying the _soundness_ that is lacking in a language like Ruby.
 
-```reason
-let  x  =  Js.Array.join([|"1",  "2"|]);
-let  x  =  Js.Array.joinWith("",  [|"1",  "2"|]);
-```
+However, the ReasonML language cannot (and probably should not) attempt to provide a large library of functions for the sake of expressiveness - a lot of these functions will also be very domain-specific.
 
-The first statement will throw a warning, because `Js.Array.join` is deprecated. I'm not sure _why_, and I don't want to _guess_, but I know which one I'd prefer to write to just _join_ two strings together.
-
-Yes, `joinWith` can do exactly what `join` can, but in _Ruby_ land, the idea of deprecating `join` would not fly. In fact, it'd probably just stay as a function that uses `joinWith` internally:
-
-```reason
-let join = t => t |> joinWith("");
-```
-
-Now these kinds of convenience functions, don't have to a part of the standard library. _Rails_ uses [Active Support](https://guides.rubyonrails.org/active_support_core_extensions.html) to extend the _language_ so that we programmers have access to a syntax that can be both expressive and succinct.
+_Rails_ uses [Active Support](https://guides.rubyonrails.org/active_support_core_extensions.html) to extend the _language_ so that developers have access to a syntax that can be both expressive and succinct. An equivalent library should be packaged with the framework.
 
 ### List of requirements:
 
 1. Include a package that contains utility functions and extensions to the standard library.
 
-**[TODO]** When written like _that_, it doesn't seem that important, but the reality is that using Rails without ActiveSupport would feel _crippling_.
+When written like _that_, it doesn't seem quite important, but the reality is that using Rails without ActiveSupport would feel _crippling_. Most Rails developers are so used to the additions that ActiveSupport brings that they don't know [where Ruby ends and Rails begins](https://railshurts.com/quiz/).
