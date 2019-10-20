@@ -1,10 +1,14 @@
 # Rails on ReasonML (RoRML)
 
-## Introduction
+This is a follow-up to Jasim A Basheer's post titled [_Rails on Ocaml_](https://protoship.io/blog/rails-on-ocaml/) where he talks about _why_ a Rails-like web framework should be written with ReasonML. This article attempts to expand on that by talking about the _features_ that should be expected from such a framework, what it could _look_ like, and discuss whether there are candidate libraries that can be included into such this framework.
 
-This is a follow-up to Jasim A Basheer's post titled _Rails on Ocaml_. It expands on the ideas presented there to create a more concrete list of suggestions that could be used to build a web-framework that learns from what Ruby-on-Rails does best. This article suggests the use of ReasonML to build this new framework, given that it is a strongly-typed functional programming language that mangages to the pragmatic about its choices.
+## Status of the document
 
-This article is split into sections that cover the major features that are _expected_ from a modern web-framework. However, this does not mean that _all_ these features must be present for the framework to be viable. Rails collected these features over time, and continues to do so(conventions for file storage were introduced in Rails 5.2), and relied on third-party packages to supply what was missing.
+This document is woefully incomplete, and as such, is only useful to folks who wish to contribute to the _idea_ of a _Rails on ReasonML_ (or similar language). Please expand / contribute if you wish to discuss how such a framework can come into being (or if there are viable alternatives).
+
+## Organization
+
+This document is split into sections that covers major features. However, this does not mean that _all_ of these features must be present for the framework to be viable. Rails collected these features over time, and continues to do so (conventions for file storage were introduced in Rails 5.2), and relied on third-party packages to supply what was missing.
 
 ## What's covered?
 
@@ -28,9 +32,8 @@ This article is split into sections that cover the major features that are _expe
 
 ## Testing
 
-```
-[TODO] Are there any more modern alternatives to the Capybara for "system" tests?
-```
+
+> **TODO:** Are there any more modern alternatives to the Capybara for "system" tests?
 
 The test framework needs to take care of a few things:
 
@@ -40,13 +43,13 @@ The test framework needs to take care of a few things:
 
 ### Setting up a test
 
-```
-TODO: There is much more to testing that seeding. The framework needs to create the database from the current schema, and needs to supply some way to clean the database between tests. Rails does this by wrapping each test in a database transaction and the rolling it back at the end - and it does so by default, without any extra configuration.
 
-There's probably more that I'm forgetting or am plain unaware of.
+> **TODO:** There is much more to testing that seeding. The framework needs to create the database from the current schema, and needs to supply some way to clean the database between tests. Rails does this by wrapping each test in a database transaction and the rolling it back at the end - and it does so by default, without any extra configuration.
+>
+> There's probably more that I'm forgetting or am plain unaware of.
+>
+> This section also needs examples.
 
-This section also needs examples.
-```
 
 In my opinion, Rails has very basic support for _seeding_ test data. Thankfully, there many alternatives that fill the gap, with the most popular being [factory_bot](https://github.com/thoughtbot/factory_bot), which allows developers to create _templates_ of _models_ which can be easily used within individual tests to create their own database environment.
 
@@ -54,9 +57,7 @@ In my opinion, Rails has very basic support for _seeding_ test data. Thankfully,
 
 Rails comes with a testing framework called Minitest.
 
-```
-[TODO] I've never really used Minitest - I can't really comment on it. Must research.
-```
+> **TODO:**  I've never really used Minitest - I can't really comment on it. Must research.
 
 A common alternative is _RSpec_, which offers a syntax that is natural to write and closely follows actions that _we_ would take when manually testing a feature in a browser. While Rails supports testing of all layers of the application, it certainly encourages writing _system_ tests using Capybara. Non-system tests are generally required only for code that doesn't get executed because of a user's action - background jobs, for example.
 
@@ -75,9 +76,7 @@ These features will have to be kept in-tact. This combination of features allows
 
 ## Utility Functions
 
-```
-[TODO] This section needs examples. Also, are there existing ReasonML packages that attempt to do this already?
-```
+> **TODO:** This section needs examples. Also, are there existing ReasonML packages that attempt to do this already? _Belt_ comes to mind, but I'm not sure if it's a good fit.
 
 > Typed FP expands our taste in programming because like how Ruby and Rails showed how _programming is writing_, Typed FP shows how _programming is mathematics_.
 
