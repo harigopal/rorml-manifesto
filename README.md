@@ -4,7 +4,7 @@ This is a follow-up to Jasim A Basheer's post titled [_Rails on Ocaml_](https://
 
 ## Status of the document
 
-This document is woefully incomplete, and as such, is only useful to folks who wish to contribute to the _idea_ of a _Rails on ReasonML_ (or similar language). Please expand / contribute if you wish to discuss how such a framework can come into being (or if there are viable alternatives).
+This document is woefully incomplete, and as such, is only useful to folks who wish to further the _idea_ of a _Rails on ReasonML_ (or similar language). Feel free to expand if you wish to discuss how such a framework can come into being (or if there are viable alternatives).
 
 ## Organization
 
