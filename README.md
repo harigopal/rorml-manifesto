@@ -1,6 +1,6 @@
-# Rails on ReasonML (RoRML)
+# Rails on ReasonML (RoRML?)
 
-This is a follow-up to Jasim A Basheer's post titled [_Rails on Ocaml_](https://protoship.io/blog/rails-on-ocaml/) where he talks about _why_ a Rails-like web framework should be written with ReasonML. This article attempts to expand on that by talking about the _features_ that should be expected from such a framework, what it could _look_ like, and discuss whether there are candidate libraries that can be included into such this framework.
+This is a follow-up to Jasim A Basheer's post titled [_Rails on Ocaml_](https://protoship.io/blog/rails-on-ocaml/) where he talks about _why_ a Rails-like web framework should be written with ReasonML. This article is an attempt to expand on that by talking about the features that should be expected from the framework, what it could look like, and discuss whether there are candidate libraries that can be included into such a framework.
 
 ## Status of the document
 
@@ -10,7 +10,7 @@ This document is woefully incomplete, and as such, is only useful to folks who w
 
 This document is split into sections that covers major features. However, this does not mean that _all_ of these features must be present for the framework to be viable. Rails collected these features over time, and continues to do so (conventions for file storage were introduced in Rails 5.2), and relied on third-party packages to supply what was missing.
 
-## What's covered?
+## Feature Wishlist
 
 1. Interacting with Databases
 2. Maintaining Databases
@@ -30,8 +30,37 @@ This document is split into sections that covers major features. However, this d
 16. Utility Functions
 17. Documentation
 
-## Testing
+## Interacting with Databases
 
+Rails uses _ActiveRecord_ to manage interactions with the database, and while it has a learning curve, it's pretty easy to get started with, and includes many conventions to promote best-practises.
+
+Here's an imaginary syntax for a similar package available with the framework:
+
+> **TODO:** This syntax is contrived, and doesn't seem to supply any compile-time info on mistakes. Are there better (existing) options?
+
+```reason
+let PR = PassiveRecord;
+
+module Users = {
+  let table = PR.make("users")
+    |> PR.hasMany("comments")
+    |> PR.belongsTo("group")
+    |> PR.validates("email", ~presence=true, ~uniqueness=true)
+};
+
+let someone = Users.table
+  |> PR.where("email", "someone@example.com")
+  |> PR.first;
+
+someone |> PR.field("name") |> Logger.info;
+
+someone
+  |> PR.related("group")
+  |> PR.field("name")
+  |> Logger.info;
+```
+
+## Testing
 
 > **TODO:** Are there any more modern alternatives to the Capybara for "system" tests?
 
@@ -91,3 +120,7 @@ _Rails_ uses [Active Support](https://guides.rubyonrails.org/active_support_core
 1. Include a package that contains utility functions and extensions to the standard library.
 
 When written like _that_, it doesn't seem quite important, but the reality is that using Rails without ActiveSupport would feel _crippling_. Most Rails developers are so used to the additions that ActiveSupport brings that they don't know [where Ruby ends and Rails begins](https://railshurts.com/quiz/).
+
+## Documentation
+
+Rails has [extensive, well-written guides](https://guides.rubyonrails.org) that cover most of its features. It takes a developer from being a newbie, all the way to being proficient, and includes many friendly examples. It sets a high standard for quality of documentation - simply _matching_ that would be quite a feat.
